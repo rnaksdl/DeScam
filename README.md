@@ -12,3 +12,13 @@ npx hardhat
 √ Do you want to install this sample project's dependencies with npm (@nomicfoundation/hardhat-toolbox)? (Y/n) · y
 
 npm install @openzeppelin/contracts
+
+
+
+npm install ipfs-http-client
+
+npx hardhat compile
+npx hardhat node
+
+new terminal
+npx hardhat run scripts/deploy.js --network localhost
