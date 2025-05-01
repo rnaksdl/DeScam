@@ -16,7 +16,7 @@ contract DeScam is Ownable, ReentrancyGuard {
     struct Report {
         uint256 id;                // Unique identifier
         address reporter;          // Report submitter
-        bytes32 contentHash;       // IPFS CID (as bytes32 for gas efficiency)
+        string ipfsHash;           // IPFS CID
         uint256 timestamp;         // Submission time
         bool verified;             // Verification status
         uint8 verificationCount;   // Number of verifications (uint8 saves gas)
