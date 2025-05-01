@@ -1,6 +1,15 @@
 # DeScam
 
 
+# to run
+npm install @openzeppelin/contracts
+npm install --save-dev @nomicfoundation/hardhat-toolbox
+npx hardhat compile
+
+
+
+# to build
+
 npm init -y
 npm install --save-dev hardhat
 npx hardhat
@@ -21,4 +30,5 @@ npx hardhat compile
 npx hardhat node
 
 new terminal
+
 npx hardhat run scripts/deploy.js --network localhost
