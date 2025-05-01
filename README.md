@@ -6,6 +6,10 @@ npm install @openzeppelin/contracts
 npm install --save-dev @nomicfoundation/hardhat-toolbox
 npx hardhat compile
 
+npx hardhat node
+npx hardhat run scripts/deploy.js --network localhost
+
+
 
 
 # to build
