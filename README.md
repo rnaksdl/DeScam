@@ -7,8 +7,17 @@ npm install --save-dev @nomicfoundation/hardhat-toolbox
 npx hardhat compile
 
 npx hardhat node
+
+in a new terminal
 npx hardhat run scripts/deploy.js --network localhost
 
+create .env and add
+REACT_APP_CONTRACT_ADDRESS=0xYourDeployedContractAddress
+
+in a new terminal
+npm install react react-dom react-scripts web-vitals @testing-library/react @testing-library/jest-dom @testing-library/user-event
+cd my-app
+npm install ipfs-http-client@56.0.2
 
 
 

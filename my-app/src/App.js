@@ -3,7 +3,15 @@ import { BrowserProvider, Contract } from 'ethers';
 import { create } from 'ipfs-http-client';
 import DeScam from './abis/DeScam.json';
 
-const ipfsClient = create({ url: 'https://ipfs.infura.io:5001/api/v0' });
+const ipfsClient = create({
+  host: 'ipfs.infura.io',
+  port: 5001,
+  protocol: 'https',
+  // For testing without authentication (will be rate limited):
+  headers: {
+    "Accept": "application/json"
+  }
+});
 const CONTRACT_ADDRESS = process.env.REACT_APP_CONTRACT_ADDRESS;
 
 function App() {
@@ -21,8 +29,9 @@ function App() {
 
   const submitReport = async () => {
     try {
-      const { path } = await ipfsClient.add(ipfsHash);
-      const tx = await contract.submitReport(path, scamType);
+      // For now, just use the string directly for testing
+      // const { path } = await ipfsClient.add(ipfsHash);
+      const tx = await contract.submitReport(ipfsHash, parseInt(scamType));
       await tx.wait();
       alert('✅ Report submitted!');
     } catch (e) {
