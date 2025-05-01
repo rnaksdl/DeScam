@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import DeScamABI from '../../artifacts/contracts/DeScam.sol/DeScam.json';
+import DeScamABI from '../../../artifacts/contracts/DeScam.sol/DeScam.json';
 
 // Contract address will be set after deployment
 const CONTRACT_ADDRESS = process.env.REACT_APP_CONTRACT_ADDRESS;
