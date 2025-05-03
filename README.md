@@ -1,47 +1,71 @@
 # DeScam
 
+## Prerequisites
+- Node.js ≥ v14
+- npm
+- dotenv for `.env` support
 
-# to run
+## Smart Contract Setup
+Install dependencies:
+```bash
+npm install --save-dev hardhat @nomicfoundation/hardhat-toolbox
 npm install @openzeppelin/contracts
-npm install --save-dev @nomicfoundation/hardhat-toolbox
+```
+Initialize Hardhat:
+```bash
+npx hardhat
+# Create a JavaScript project
+# Add .gitignore
+# Skip crash reports
+# Install sample dependencies
+```
+Compile contracts:
+```bash
 npx hardhat compile
-
+```
+Run a local node:
+```bash
 npx hardhat node
-
-in a new terminal
+```
+Deploy to localhost:
+```bash
 npx hardhat run scripts/deploy.js --network localhost
-
-create .env and add
+```
+Add contract address to `.env`:
+```env
 REACT_APP_CONTRACT_ADDRESS=0xYourDeployedContractAddress
+```
 
-in a new terminal
-npm install react react-dom react-scripts web-vitals @testing-library/react @testing-library/jest-dom @testing-library/user-event
-cd my-app
+## Frontend Setup
+From `my-app` directory, install:
+```bash
+npm install react react-dom react-scripts web-vitals
+npm install --save-dev @testing-library/react @testing-library/jest-dom @testing-library/user-event
 npm install ipfs-http-client@56.0.2
+```
+Start React server:
+```bash
+npm start
+```
 
-
-
-# to build
-
+## Full Build from Scratch
+Initialize project:
+```bash
 npm init -y
 npm install --save-dev hardhat
 npx hardhat
-
-√ What do you want to do? · Create a JavaScript project\
-√ Hardhat project root: · /path/to/your/project\
-√ Do you want to add a .gitignore? (Y/n) · y\
-√ Help us improve Hardhat with anonymous crash reports & basic usage data? (Y/n) · n\
-√ Do you want to install this sample project's dependencies with npm (@nomicfoundation/hardhat-toolbox)? (Y/n) · y
-
+```
+Install contracts and IPFS client:
+```bash
 npm install @openzeppelin/contracts
-
-
-
 npm install ipfs-http-client
-
+```
+Compile and run:
+```bash
 npx hardhat compile
 npx hardhat node
-
-new terminal
-
+```
+Deploy contracts:
+```bash
 npx hardhat run scripts/deploy.js --network localhost
+```
