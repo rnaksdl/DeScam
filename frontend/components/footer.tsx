@@ -25,7 +25,7 @@ export function Footer() {
             Contact
           </Link>
           <Link
-            href="https://github.com/yourusername/descam"
+            href="https://github.com/rnaksdl/descam"
             className="text-sm text-muted-foreground underline underline-offset-4"
             target="_blank"
             rel="noopener noreferrer"

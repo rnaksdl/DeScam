@@ -59,15 +59,20 @@ npx hardhat run scripts/deploy.js --network localhost
 
 Copy the deployed contract address and update your `.env.local` file.
 
+
 ---
 
-### 5. **Copy the Contract ABI to the Frontend**
+
+### 5. **Start the Indexer**
 
 ```bash
-cp artifacts/contracts/DeScam.sol/DeScam.json ../frontend/src/abis/
+cd ../scripts
+node indexer
 ```
 
 ---
+
+
 
 ### 6. **Start the Frontend**
 
