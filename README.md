@@ -10,7 +10,7 @@ A decentralized platform for reporting and scanning crypto scams, powered by Eth
 
 ```bash
 git clone https://github.com/rnaksdl/DeScam.git
-cd DeScam.git
+cd DeScam
 ```
 
 ---
