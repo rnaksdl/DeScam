@@ -9,10 +9,9 @@ A decentralized platform for reporting and scanning crypto scams, powered by Eth
 ### 1. **Clone the Repository**
 
 ```bash
-git clone https://github.com/your-username/your-descam-repo.git
-cd your-descam-repo
+git clone https://github.com/rnaksdl/DeScam.git
+cd DeScam.git
 ```
-> Replace `your-username/your-descam-repo` with your actual GitHub repo path.
 
 ---
 
