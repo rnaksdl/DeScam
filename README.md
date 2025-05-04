@@ -1,71 +1,137 @@
 # DeScam
 
-## Prerequisites
-- Node.js ≥ v14
-- npm
-- dotenv for `.env` support
+A decentralized platform for reporting and scanning crypto scams, powered by Ethereum smart contracts.
 
-## Smart Contract Setup
-Install dependencies:
+---
+
+## 🚀 Getting Started
+
+### 1. **Clone the Repository**
+
 ```bash
-npm install --save-dev hardhat @nomicfoundation/hardhat-toolbox
-npm install @openzeppelin/contracts
+git clone https://github.com/your-username/your-descam-repo.git
+cd your-descam-repo
 ```
-Initialize Hardhat:
+> Replace `your-username/your-descam-repo` with your actual GitHub repo path.
+
+---
+
+### 2. **Install Dependencies**
+
+**Frontend:**
 ```bash
-npx hardhat
-# Create a JavaScript project
-# Add .gitignore
-# Skip crash reports
-# Install sample dependencies
-```
-Compile contracts:
-```bash
-npx hardhat compile
-```
-Run a local node:
-```bash
-npx hardhat node
-```
-Deploy to localhost:
-```bash
-npx hardhat run scripts/deploy.js --network localhost
-```
-Add contract address to `.env`:
-```env
-REACT_APP_CONTRACT_ADDRESS=0xYourDeployedContractAddress
+cd frontend
+npm install
 ```
 
-## Frontend Setup
-From `my-app` directory, install:
+**Smart Contracts:**
 ```bash
-npm install react react-dom react-scripts web-vitals
-npm install --save-dev @testing-library/react @testing-library/jest-dom @testing-library/user-event
-npm install ipfs-http-client@56.0.2
-```
-Start React server:
-```bash
-npm start
+cd ../contracts
+npm install
 ```
 
-## Full Build from Scratch
-Initialize project:
-```bash
-npm init -y
-npm install --save-dev hardhat
-npx hardhat
+---
+
+### 3. **Set Up Environment Variables**
+
+Create a `.env.local` file in the `frontend` directory:
+
 ```
-Install contracts and IPFS client:
-```bash
-npm install @openzeppelin/contracts
-npm install ipfs-http-client
+NEXT_PUBLIC_CONTRACT_ADDRESS=0xYourContractAddress
+NEXT_PUBLIC_RPC_URL=http://127.0.0.1:8545
 ```
-Compile and run:
+> Update with your deployed contract's address.
+
+---
+
+### 4. **Compile & Deploy the Smart Contract (Hardhat)**
+
 ```bash
+cd ../contracts
 npx hardhat compile
 npx hardhat node
 ```
-Deploy contracts:
+
+In a **new terminal**, deploy your contract to the local node:
 ```bash
 npx hardhat run scripts/deploy.js --network localhost
 ```
+
+Copy the deployed contract address and update your `.env.local` file.
+
+---
+
+### 5. **Copy the Contract ABI to the Frontend**
+
+```bash
+cp artifacts/contracts/DeScam.sol/DeScam.json ../frontend/src/abis/
+```
+
+---
+
+### 6. **Start the Frontend**
+
+```bash
+cd ../frontend
+npm run dev
+```
+Visit [http://localhost:3000](http://localhost:3000) in your browser.
+
+---
+
+### 7. **Connect MetaMask**
+
+- Add a new network in MetaMask:
+    - **Network Name:** Localhost 8545
+    - **RPC URL:** http://127.0.0.1:8545
+    - **Chain ID:** 31337
+- Import one of the private keys from your Hardhat node output to get test ETH.
+
+---
+
+### 8. **Using the App**
+
+- **Connect your wallet** using the Connect Wallet button.
+- **Report scams** using the Report page.
+- **Scan addresses/URLs** using the Scan page.
+- **View all reports** on the Dashboard.
+
+---
+
+### 9. **Deploying to a Testnet (Optional)**
+
+- Configure Hardhat for Sepolia or another testnet.
+- Deploy your contract (`npx hardhat run scripts/deploy.js --network sepolia`)
+- Update `.env.local` with the new contract address and RPC URL.
+- Add the testnet to MetaMask and fund with test ETH.
+
+---
+
+## 🛠 Tech Stack
+
+- **Smart Contracts:** Solidity, Hardhat, OpenZeppelin
+- **Frontend:** Next.js, React, TypeScript, Ethers.js, Tailwind CSS
+
+---
+
+## 🙏 Contributing
+
+Pull requests welcome! For major changes, please open an issue first to discuss what you would like to change.
+
+---
+
+## 🛡️ Disclaimer
+
+This project is for educational/demo purposes.  
+**Do not use on mainnet with real funds unless you have fully audited the code.**
+
+---
+
+## 📄 License
+
+This project does **not** currently specify an open source license.  
+If you intend to share, modify, or use this code, please contact the repository owner for permissions or licensing terms.
+
+---
+
+**Happy scanning and reporting!**
