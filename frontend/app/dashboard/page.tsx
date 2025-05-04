@@ -1,30 +1,52 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Shield, AlertTriangle, CheckCircle, BarChart3, PieChart, Users } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
+import { contractService } from "@/services/contract"
+
+type RecentScan = {
+  id: number
+  url: string
+  result: string
+  date: string
+}
 
 export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState("overview")
+  const [recentScans, setRecentScans] = useState<RecentScan[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
-  // Mock data for dashboard
+  useEffect(() => {
+    async function loadReports() {
+      try {
+        const reports = await contractService.getReports(5)
+        const formattedReports = reports.map((report) => ({
+          id: report.id,
+          url: report.ipfsHash,
+          result: "threat", // All blockchain reports are threats
+          date: new Date(report.timestamp * 1000).toLocaleString(),
+        }))
+        setRecentScans(formattedReports)
+      } catch (error) {
+        console.error("Failed to load reports:", error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    loadReports()
+  }, [])
+
+  // You can keep these stats as mock or fetch from blockchain if you want
   const stats = {
     scansToday: 24,
     scansTotal: 1243,
     threatsDetected: 17,
     threatsPrevented: 15,
   }
-
-  const recentScans = [
-    { id: 1, url: "https://secure-bank-login.com", result: "threat", date: "2 hours ago" },
-    { id: 2, url: "https://amazon.com", result: "safe", date: "3 hours ago" },
-    { id: 3, url: "https://win-free-iphone.net", result: "threat", date: "5 hours ago" },
-    { id: 4, url: "https://netflix.com", result: "safe", date: "Yesterday" },
-    { id: 5, url: "https://claim-your-prize.xyz", result: "threat", date: "Yesterday" },
-  ]
 
   return (
     <div className="container py-10">
@@ -125,36 +147,30 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {recentScans.map((scan) => (
-                  <div key={scan.id} className="flex items-center justify-between p-4 border rounded-lg">
-                    <div className="flex items-center space-x-4">
-                      {scan.result === "threat" ? (
+                {isLoading ? (
+                  <p>Loading...</p>
+                ) : recentScans.length === 0 ? (
+                  <p>No recent scans found.</p>
+                ) : (
+                  recentScans.map((scan) => (
+                    <div key={scan.id} className="flex items-center justify-between p-4 border rounded-lg">
+                      <div className="flex items-center space-x-4">
                         <div className="rounded-full bg-red-100 p-2 dark:bg-red-900/20">
                           <AlertTriangle className="h-5 w-5 text-red-600 dark:text-red-400" />
                         </div>
-                      ) : (
-                        <div className="rounded-full bg-green-100 p-2 dark:bg-green-900/20">
-                          <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400" />
+                        <div>
+                          <p className="font-medium">{scan.url}</p>
+                          <p className="text-sm text-muted-foreground">{scan.date}</p>
                         </div>
-                      )}
+                      </div>
                       <div>
-                        <p className="font-medium">{scan.url}</p>
-                        <p className="text-sm text-muted-foreground">{scan.date}</p>
+                        <span className="px-2 py-1 rounded-full text-xs bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400">
+                          Threat Detected
+                        </span>
                       </div>
                     </div>
-                    <div>
-                      <span
-                        className={`px-2 py-1 rounded-full text-xs ${
-                          scan.result === "threat"
-                            ? "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400"
-                            : "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400"
-                        }`}
-                      >
-                        {scan.result === "threat" ? "Threat Detected" : "Safe"}
-                      </span>
-                    </div>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </CardContent>
           </Card>
