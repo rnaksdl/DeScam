@@ -11,7 +11,7 @@ export function Footer() {
             <span className="font-bold">DeScam</span>
           </Link>
           <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
-            &copy; {new Date().getFullYear()} DeScam. Open source under MIT License.
+            &copy; {new Date().getFullYear()} DeScam. Open source.
           </p>
         </div>
         <div className="flex gap-4">

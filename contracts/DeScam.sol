@@ -48,7 +48,7 @@ contract DeScam is Ownable, ReentrancyGuard {
     event StakeReleased(uint256 indexed reportId, address indexed staker, uint256 amount, bool wasVerifier);
     event GovernanceParameterChanged(string parameterName, uint256 oldValue, uint256 newValue);
     
-    // Constructor - fixed for OpenZeppelin 4.9.3
+    // Constructor
     constructor() {
         reportCount = 0;
     }
@@ -66,6 +66,7 @@ contract DeScam is Ownable, ReentrancyGuard {
     }
     
     // Core functions
+
     function submitReport(string memory _ipfsHash, ScamType _scamType) 
         public 
         whenNotPaused 
@@ -101,7 +102,35 @@ contract DeScam is Ownable, ReentrancyGuard {
         report.ipfsHash = _newIpfsHash;
         emit ReportDetailsUpdated(_reportId, _newIpfsHash, _scamType);
     }
-    
-    // Rest of your contract functions remain the same
-    // ...
+
+    // Verification and dispute logic can be added here as needed
+
+    // Governance functions
+    function setVerificationStake(uint256 _newStake) external onlyOwner {
+        emit GovernanceParameterChanged("verificationStake", verificationStake, _newStake);
+        verificationStake = _newStake;
+    }
+
+    function setReputationCooldown(uint256 _newCooldown) external onlyOwner {
+        emit GovernanceParameterChanged("reputationCooldown", reputationCooldown, _newCooldown);
+        reputationCooldown = _newCooldown;
+    }
+
+    function setDisputePeriod(uint256 _newPeriod) external onlyOwner {
+        emit GovernanceParameterChanged("disputePeriod", disputePeriod, _newPeriod);
+        disputePeriod = _newPeriod;
+    }
+
+    function setResolutionThreshold(uint256 _newThreshold) external onlyOwner {
+        emit GovernanceParameterChanged("resolutionThreshold", resolutionThreshold, _newThreshold);
+        resolutionThreshold = _newThreshold;
+    }
+
+    function pause() external onlyOwner {
+        paused = true;
+    }
+
+    function unpause() external onlyOwner {
+        paused = false;
+    }
 }

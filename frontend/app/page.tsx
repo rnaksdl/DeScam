@@ -93,7 +93,7 @@ export default function Home() {
                     Get Started
                   </Button>
                 </Link>
-                <Link href="https://github.com/yourusername/descam" target="_blank" rel="noopener noreferrer">
+                <Link href="https://github.com/rnaksdl/descam" target="_blank" rel="noopener noreferrer">
                   <Button
                     variant="outline"
                     className="inline-flex h-10 items-center justify-center rounded-md border border-input bg-background px-8 text-sm font-medium shadow-sm"

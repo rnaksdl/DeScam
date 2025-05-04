@@ -2,106 +2,96 @@
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Wallet } from "lucide-react"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+import { contractService } from "@/services/contract"
 
 export function ConnectWallet() {
-  const [account, setAccount] = useState<string | null>(null)
+  const [account, setAccount] = useState<string>("")
   const [isConnecting, setIsConnecting] = useState(false)
+  const [pendingRequest, setPendingRequest] = useState(false)
+  const [errorMsg, setErrorMsg] = useState("")
 
   useEffect(() => {
-    // Check if MetaMask is installed
-    const checkConnection = async () => {
-      if (typeof window.ethereum !== "undefined") {
-        try {
-          // Check if already connected
-          const accounts = await window.ethereum.request({ method: "eth_accounts" })
-          if (accounts.length > 0) {
-            setAccount(accounts[0])
-          }
-        } catch (error) {
-          console.error("Error checking connection:", error)
-        }
-      }
+    if (typeof window === "undefined" || !window.ethereum) return
+
+    const handleAccountsChanged = (accounts: string[]) => {
+      setAccount(accounts[0] || "")
+      setPendingRequest(false)
+      setErrorMsg("")
     }
 
-    checkConnection()
-
-    // Listen for account changes
-    if (typeof window.ethereum !== "undefined") {
-      window.ethereum.on("accountsChanged", (accounts: string[]) => {
-        if (accounts.length > 0) {
-          setAccount(accounts[0])
-        } else {
-          setAccount(null)
-        }
-      })
+    window.ethereum.on("accountsChanged", handleAccountsChanged)
+    return () => {
+      window.ethereum?.removeListener("accountsChanged", handleAccountsChanged)
     }
   }, [])
 
   const connectWallet = async () => {
-    if (typeof window.ethereum !== "undefined") {
-      try {
-        setIsConnecting(true)
-        const accounts = await window.ethereum.request({ method: "eth_requestAccounts" })
-        setAccount(accounts[0])
-      } catch (error) {
-        console.error("Error connecting to MetaMask:", error)
-      } finally {
-        setIsConnecting(false)
+    setErrorMsg("")
+    setPendingRequest(false)
+    if (typeof window === "undefined" || !window.ethereum) {
+      setErrorMsg("MetaMask is not installed. Please install MetaMask and try again.")
+      return
+    }
+    setIsConnecting(true)
+    try {
+      // Only call eth_requestAccounts on user action
+      const accounts = await window.ethereum.request({ method: "eth_requestAccounts" })
+      setAccount(accounts[0])
+      await contractService.connect()
+    } catch (error: any) {
+      if (error.code === -32002) {
+        setPendingRequest(true)
+        setErrorMsg(
+          "MetaMask is already processing a connection request. " +
+          "If you don't see a popup, please click the MetaMask extension icon in your browser to approve or reject the pending request. " +
+          "After resolving, you can try again."
+        )
+      } else if (error.code === 4001) {
+        setErrorMsg("You rejected the connection request.")
+      } else {
+        setErrorMsg("Error connecting to MetaMask. Please try again.")
       }
-    } else {
-      window.open("https://metamask.io/download/", "_blank")
+      console.error("Error connecting to MetaMask:", error)
+    } finally {
+      setIsConnecting(false)
     }
   }
 
-  const disconnectWallet = () => {
-    setAccount(null)
-  }
-
-  const formatAddress = (address: string) => {
-    return `${address.substring(0, 6)}...${address.substring(address.length - 4)}`
-  }
-
-  if (account) {
-    return (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="outline" size="sm" className="flex items-center gap-2">
-            <Wallet className="h-4 w-4" />
-            <span>{formatAddress(account)}</span>
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Wallet Connected</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            className="cursor-pointer"
-            onClick={() => {
-              navigator.clipboard.writeText(account)
-            }}
-          >
-            Copy Address
-          </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer" onClick={disconnectWallet}>
-            Disconnect
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    )
+  const tryAgain = () => {
+    setErrorMsg("")
+    setPendingRequest(false)
+    connectWallet()
   }
 
   return (
-    <Button onClick={connectWallet} disabled={isConnecting} size="sm" className="flex items-center gap-2">
-      <Wallet className="h-4 w-4" />
-      {isConnecting ? "Connecting..." : "Connect Wallet"}
-    </Button>
+    <div>
+      <Button
+        onClick={connectWallet}
+        disabled={isConnecting || !!account || pendingRequest}
+      >
+        {isConnecting
+          ? "Connecting..."
+          : account
+          ? `${account.slice(0, 6)}...${account.slice(-4)}`
+          : pendingRequest
+          ? "Pending..."
+          : "Connect Wallet"}
+      </Button>
+      {errorMsg && (
+        <div className="mt-2 text-sm text-red-600">
+          {errorMsg}
+          {pendingRequest && (
+            <div className="mt-2 flex flex-col gap-2">
+              <span>
+                <strong>Tip:</strong> If you don't see a popup, click the MetaMask extension icon in your browser.
+              </span>
+              <Button variant="outline" size="sm" onClick={tryAgain}>
+                Try Again
+              </Button>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
   )
 }
