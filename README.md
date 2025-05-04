@@ -71,7 +71,8 @@ node ../scripts/indexer
 
 
 ### 6. **Start the Frontend**
-In a **new terminal**, deploy your contract to the local node:
+In a **new terminal**, start the frontend
+Make sure you're in frontend directory
 
 ```bash
 npm run dev
