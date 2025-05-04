@@ -37,10 +37,9 @@ npm install
 Create a `.env.local` file in the `frontend` directory:
 
 ```
-NEXT_PUBLIC_CONTRACT_ADDRESS=0xYourContractAddress
+NEXT_PUBLIC_CONTRACT_ADDRESS=0xPutYourContractAddressHereInNextStep
 NEXT_PUBLIC_RPC_URL=http://127.0.0.1:8545
 ```
-> Update with your deployed contract's address.
 
 ---
 
@@ -54,7 +53,7 @@ npx hardhat node
 
 In a **new terminal**, deploy your contract to the local node:
 ```bash
-npx hardhat run scripts/deploy.js --network localhost
+npx hardhat run ../scripts/deploy.js --network localhost
 ```
 
 Copy the deployed contract address and update your `.env.local` file.
@@ -64,10 +63,8 @@ Copy the deployed contract address and update your `.env.local` file.
 
 
 ### 5. **Start the Indexer**
-
 ```bash
-cd ../scripts
-node indexer
+node ../scripts/indexer
 ```
 
 ---
@@ -75,9 +72,9 @@ node indexer
 
 
 ### 6. **Start the Frontend**
+In a **new terminal**, deploy your contract to the local node:
 
 ```bash
-cd ../frontend
 npm run dev
 ```
 Visit [http://localhost:3000](http://localhost:3000) in your browser.
