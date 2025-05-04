@@ -1,6 +1,7 @@
 # DeScam
 
 A decentralized platform for reporting and scanning crypto scams, powered by Ethereum smart contracts.
+▶️ [Watch the demo video](./video-demo.mp4)
 
 ---
 
